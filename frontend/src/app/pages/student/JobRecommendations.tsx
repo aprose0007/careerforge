@@ -8,6 +8,8 @@ import { Badge } from "../../components/ui/badge";
 import { MapPin, Briefcase, Clock, Search, Filter, TrendingUp, Sparkles, Building2, Loader2 } from "lucide-react";
 import { getJobs, saveRecommendations, type StudentProfile, type Job } from "../../services/firebase";
 
+import { calculateMatch } from "../../services/matcher";
+
 export default function JobRecommendations() {
   const { student } = useOutletContext<{ student: StudentProfile | null }>();
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,64 +35,87 @@ export default function JobRecommendations() {
     fetchJobs();
   }, []);
 
-  // 2. Call AI Backend for Matching
+  // 2. Perform AI Matching (Prioritize Remote Render API if available, else use Local)
   useEffect(() => {
-    const matchJobs = async () => {
-      if (!student || !allJobs.length || !student.skills.length) {
-        // If no student profile or skills, just show raw jobs with 0 match
+    const performMatching = async () => {
+      if (!student || !allJobs.length) {
         setMatchedJobs(allJobs.map(j => ({ ...j, match: 0, missing_skills: [] })));
         return;
       }
 
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
-      try {
-        const response = await fetch(`${backendUrl}/match-jobs`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            resume_text: "", // We might need to store/fetch full resume text if we want high accuracy
-            user_skills: student.skills,
-            jobs: allJobs.map(j => ({
-              id: j.id,
-              description: j.description,
-              required_skills: j.skills
-            }))
-          })
-        });
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      let results: any[] = [];
 
-        if (response.ok) {
-          const aiResults = await response.json();
-          
-          // Persistence: Save to Firestore 'recommendations' collection
-          const recommendationsToSave = aiResults.map((res: any) => ({
-            userId: student.id,
-            jobId: res.job_id,
-            matchScore: res.match_score,
-            missingSkills: res.missing_skills,
-            status: "new" as const
-          }));
-          
-          await saveRecommendations(recommendationsToSave);
+      if (backendUrl) {
+        try {
+          const response = await fetch(`${backendUrl}/match-jobs`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              resume_text: student.resumeText || "",
+              user_skills: student.skills,
+              jobs: allJobs.map(j => ({
+                id: j.id,
+                description: j.description,
+                required_skills: j.skills
+              }))
+            })
+          });
 
-          const merged = allJobs.map(job => {
-            const aiMatch = aiResults.find((r: any) => r.job_id === job.id);
-            return {
-              ...job,
-              match: aiMatch ? aiMatch.match_score : 0,
-              missing_skills: aiMatch ? aiMatch.missing_skills : []
-            };
-          }).sort((a, b) => b.match - a.match);
-          
-          setMatchedJobs(merged);
+          if (response.ok) {
+            const aiResults = await response.json();
+            results = allJobs.map(job => {
+              const aiMatch = aiResults.find((r: any) => r.job_id === job.id);
+              return {
+                ...job,
+                match: aiMatch ? aiMatch.match_score : 0,
+                missing_skills: aiMatch ? aiMatch.missing_skills : []
+              };
+            });
+          } else {
+            throw new Error("Render API failed");
+          }
+        } catch (err) {
+          console.warn("Render API failed, falling back to client-side matching");
+          results = allJobs.map(job => {
+            const { score, missingSkills } = calculateMatch(
+              student.resumeText || "",
+              job.description,
+              student.skills || [],
+              job.skills || []
+            );
+            return { ...job, match: score, missing_skills: missingSkills };
+          });
         }
-      } catch (err) {
-        console.error("AI Matching failed:", err);
-        setMatchedJobs(allJobs.map(j => ({ ...j, match: 0, missing_skills: [] })));
+      } else {
+        // Pure Local Matching
+        results = allJobs.map(job => {
+          const { score, missingSkills } = calculateMatch(
+            student.resumeText || "",
+            job.description,
+            student.skills || [],
+            job.skills || []
+          );
+          return { ...job, match: score, missing_skills: missingSkills };
+        });
       }
+
+      // Final Sort & Persist
+      results.sort((a, b) => b.match - a.match);
+      setMatchedJobs(results);
+      
+      const recommendationsToSave = results.map(res => ({
+        userId: student.id,
+        jobId: res.id,
+        matchScore: res.match,
+        missingSkills: res.missing_skills,
+        status: "new" as const
+      }));
+      await saveRecommendations(recommendationsToSave);
     };
 
     if (!isLoading) {
-      matchJobs();
+      performMatching();
     }
   }, [allJobs, student, isLoading]);
 

@@ -1,0 +1,7 @@
+# Firebase Functions Python Dependencies
+firebase-functions~=0.1.0
+firebase-admin~=6.0.0
+scikit-learn
+pydantic
+numpy
+flask-cors

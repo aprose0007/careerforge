@@ -59,6 +59,7 @@ export interface StudentProfile {
   profileStrength: number;
   resumeUrl?: string;
   resumeFileName?: string;
+  resumeText?: string;
   lastAnalyzed?: any;
 }
 
