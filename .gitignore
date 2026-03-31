@@ -1,0 +1,25 @@
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.firebase/
+
+# Python / Backend
+backend/__pycache__/
+backend/*.pyc
+backend/.venv/
+backend/env/
+
+# Build Logs & Temp Files
+*.log
+build_output.txt
+projects.json
+
+# IDEs
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
