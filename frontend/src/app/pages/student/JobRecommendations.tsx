@@ -35,7 +35,7 @@ export default function JobRecommendations() {
     fetchJobs();
   }, []);
 
-  // 2. Perform AI Matching (Prioritize Remote Render API if available, else use Local)
+  // 2. Perform AI Matching (Prioritize Remote AI Engine if available, else use Local)
   useEffect(() => {
     const performMatching = async () => {
       if (!student || !allJobs.length) {
@@ -76,7 +76,7 @@ export default function JobRecommendations() {
             throw new Error("Render API failed");
           }
         } catch (err) {
-          console.warn("Render API failed, falling back to client-side matching");
+          console.warn("AI Engine failed, falling back to client-side matching");
           results = allJobs.map(job => {
             const { score, missingSkills } = calculateMatch(
               student.resumeText || "",

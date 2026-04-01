@@ -97,7 +97,7 @@ export default function ResumeUpload() {
       // 1. Extract Text
       const text = await extractTextFromPDF(file);
 
-      // 2. Perform AI Analysis (Prioritize Remote Render API if available, else use Local)
+      // 2. Perform AI Analysis (Prioritize Remote AI Engine if available, else use Local)
       const backendUrl = import.meta.env.VITE_BACKEND_URL;
       let extractedSkills: string[] = [];
       
@@ -112,11 +112,11 @@ export default function ResumeUpload() {
             const data = await response.json();
             extractedSkills = data.skills;
           } else {
-            console.warn("Render API failed, falling back to client-side extraction");
+            console.warn("AI Engine failed, falling back to client-side extraction");
             extractedSkills = extractSkillsFromText(text, KNOWN_SKILLS);
           }
         } catch (err) {
-          console.warn("Render API unreachable, falling back to client-side extraction");
+          console.warn("AI Engine unreachable, falling back to client-side extraction");
           extractedSkills = extractSkillsFromText(text, KNOWN_SKILLS);
         }
       } else {
