@@ -47,11 +47,11 @@ export default function ProfileSetup() {
           </p>
         </div>
         
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="rounded-xl border-2 font-bold hover:bg-accent h-11 px-6">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+          <Button variant="outline" className="w-full sm:w-auto rounded-xl border-2 font-bold hover:bg-accent h-11 px-6">
             Discard
           </Button>
-          <Button className="rounded-xl font-bold bg-gradient-brand shadow-md border-0 h-11 px-6">
+          <Button className="w-full sm:w-auto rounded-xl font-bold bg-gradient-brand shadow-md border-0 h-11 px-6">
             <Save className="w-4 h-4 mr-2" />
             Save Changes
           </Button>

@@ -201,13 +201,13 @@ export default function ResumeUpload() {
 
       {file && (
         <Card className="p-6 border-2">
-          <div className="flex items-start justify-between">
-            <div className="flex items-start gap-4 flex-1">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-4 flex-1 w-full min-w-0">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                 <FileText className="w-6 h-6 text-primary" />
               </div>
-              <div className="flex-1 space-y-1">
-                <h3 className="font-semibold">{file.name}</h3>
+              <div className="flex-1 space-y-1 min-w-0">
+                <h3 className="font-semibold truncate">{file.name}</h3>
                 <p className="text-sm text-muted-foreground">{(file.size / 1024).toFixed(2)} KB</p>
                 {uploadComplete && (
                   <div className="flex items-center gap-2 text-green-600 mt-2">
@@ -218,11 +218,11 @@ export default function ResumeUpload() {
               </div>
             </div>
             {!uploadComplete ? (
-              <Button onClick={handleUpload} disabled={isUploading} className="h-12 rounded-xl px-8">
+              <Button onClick={handleUpload} disabled={isUploading} className="w-full sm:w-auto h-12 rounded-xl px-8 shrink-0">
                 {isUploading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Uploading...</> : "Upload"}
               </Button>
             ) : (
-              <Button onClick={handleAnalyze} disabled={isAnalyzing} className="h-12 rounded-xl px-8">
+              <Button onClick={handleAnalyze} disabled={isAnalyzing} className="w-full sm:w-auto h-12 rounded-xl px-8 shrink-0">
                 {isAnalyzing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Analyzing...</> : "Analyze Resume"}
               </Button>
             )}
@@ -239,17 +239,17 @@ export default function ResumeUpload() {
             { name: "Resume_Alex_Johnson_v1.pdf", date: "March 15, 2026", status: "analyzed" },
           ].map((upload, index) => (
             <Card key={index} className="p-4 border-2 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-4 w-full sm:w-auto overflow-hidden">
+                  <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center shrink-0">
                     <FileText className="w-5 h-5 text-primary" />
                   </div>
-                  <div>
-                    <h4 className="font-medium">{upload.name}</h4>
+                  <div className="min-w-0">
+                    <h4 className="font-medium truncate">{upload.name}</h4>
                     <p className="text-sm text-muted-foreground">{upload.date}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 self-end sm:self-auto shrink-0">
                   <span className="text-xs px-3 py-1 rounded-full bg-green-50 text-green-600 border border-green-100 font-medium">Analyzed</span>
                   <Button variant="ghost" size="sm" className="rounded-lg">View Results</Button>
                 </div>
