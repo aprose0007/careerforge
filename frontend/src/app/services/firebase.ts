@@ -103,7 +103,7 @@ export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
   try {
-    const result = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
+    const result = await signInWithPopup(auth, provider);
     return {
       uid: result.user.uid,
       email: result.user.email,
