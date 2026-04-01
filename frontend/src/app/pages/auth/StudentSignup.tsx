@@ -52,12 +52,13 @@ export default function StudentSignup() {
       const user = await Promise.race([authPromise, timeoutPromise]);
       
       try {
-        await updateStudent(user.uid, {
+        // Run Firestore profile creation completely in the background without blocking navigation
+        updateStudent(user.uid, {
           name: name,
           email: email,
-        });
+        }).catch(e => console.warn("Background Firestore profile creation failed:", e));
       } catch (e) {
-        console.warn("Firestore profile creation failed or hangs, but user created:", e);
+        console.warn("Firestore dispatch failed", e);
       }
       navigate("/student");
     } catch (err: any) {
