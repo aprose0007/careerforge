@@ -4,7 +4,6 @@ import RoleSelection from "./pages/auth/RoleSelection";
 import StudentLogin from "./pages/auth/StudentLogin";
 import StudentSignup from "./pages/auth/StudentSignup";
 import AdminLogin from "./pages/auth/AdminLogin";
-import AdminSignup from "./pages/auth/AdminSignup";
 
 import StudentDashboard from "./pages/student/StudentDashboard";
 import ProfileSetup from "./pages/student/ProfileSetup";
@@ -32,7 +31,6 @@ export const router = createBrowserRouter([
       { path: "student/login", Component: StudentLogin },
       { path: "student/signup", Component: StudentSignup },
       { path: "admin/login", Component: AdminLogin },
-      { path: "admin/signup", Component: AdminSignup },
     ],
   },
   {
