@@ -32,7 +32,7 @@ import {
 // These values should be replaced with your actual Firebase project settings
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "careerforge-smoky.vercel.app",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "careerforge-48f3e.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "YOUR_STORAGE_BUCKET",
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_MESSAGING_SENDER_ID",
