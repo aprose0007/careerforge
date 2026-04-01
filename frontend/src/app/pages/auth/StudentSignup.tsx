@@ -44,7 +44,13 @@ export default function StudentSignup() {
         return;
       }
       
-      const user = await signUpWithEmail(email, password, name);
+      const authPromise = signUpWithEmail(email, password, name);
+      const timeoutPromise = new Promise<any>((_, reject) => 
+        setTimeout(() => reject(new Error("Network timeout: Firebase is taking too long to respond. Please check your connection or refresh the page.")), 10000)
+      );
+      
+      const user = await Promise.race([authPromise, timeoutPromise]);
+      
       try {
         await updateStudent(user.uid, {
           name: name,
@@ -55,9 +61,10 @@ export default function StudentSignup() {
       }
       navigate("/student");
     } catch (err: any) {
+      console.error("Signup error catch triggered:", err);
       setError(err.message || "Failed to create account.");
     } finally {
-      setIsLoading(false); // Only executes if navigate doesn't unmount abruptly
+      setIsLoading(false);
     }
   };
 
