@@ -2,9 +2,7 @@ import { initializeApp } from "firebase/app";
 import { 
   getAuth, 
   GoogleAuthProvider, 
-  signInWithRedirect, 
-  getRedirectResult,
-  getAdditionalUserInfo,
+  signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut 
@@ -103,19 +101,19 @@ export interface Recommendation {
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
-  await signInWithRedirect(auth, provider);
-}
-
-export async function checkAuthRedirect() {
-  const result = await getRedirectResult(auth);
-  if (!result) return null;
-  
-  return {
-    uid: result.user.uid,
-    email: result.user.email,
-    displayName: result.user.displayName,
-    isNewUser: getAdditionalUserInfo(result)?.isNewUser
-  };
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return {
+      uid: result.user.uid,
+      email: result.user.email,
+      displayName: result.user.displayName,
+    };
+  } catch (err: any) {
+    if (err.code === 'auth/cancelled-popup-request' || err.code === 'auth/popup-blocked') {
+      throw new Error("Google login blocked by your browser's strict Cross-Origin security. Please use Email Sign Up.");
+    }
+    throw err;
+  }
 }
 
 export async function signInWithEmail(email: string, password: string) {

@@ -17,12 +17,18 @@ export default function StudentSignup() {
     setIsLoading(true);
     setError(null);
     try {
-      sessionStorage.setItem("authRole", "student");
-      await signInWithGoogle();
-      // Process halts here as redirect happens
+      const user = await signInWithGoogle();
+      try {
+        await updateStudent(user.uid, {
+          name: user.displayName || "Anonymous User",
+          email: user.email || "",
+        });
+      } catch(e) { console.warn("Seed fail"); }
+      navigate("/student");
     } catch (err: any) {
       console.error("Signup failed:", err);
       setError(err.message || "Failed to sign up with Google.");
+    } finally {
       setIsLoading(false);
     }
   };
