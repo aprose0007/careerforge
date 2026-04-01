@@ -3,7 +3,8 @@ import {
   getAuth, 
   GoogleAuthProvider, 
   signInWithPopup, 
-  signInWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut as firebaseSignOut 
 } from "firebase/auth";
 import { 
@@ -99,6 +100,10 @@ export interface Recommendation {
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
+  // Provide custom parameters to prompt account selection explicitly every time
+  provider.setCustomParameters({
+    prompt: 'select_account'
+  });
   const result = await signInWithPopup(auth, provider);
   return {
     uid: result.user.uid,
@@ -109,8 +114,12 @@ export async function signInWithGoogle() {
 
 export async function signInWithEmail(email: string, password: string) {
   const result = await signInWithEmailAndPassword(auth, email, password);
-  const role = email.includes("admin") ? "admin" : "student";
-  return { uid: result.user.uid, role };
+  return { uid: result.user.uid, email: result.user.email, displayName: result.user.displayName };
+}
+
+export async function signUpWithEmail(email: string, password: string, name: string) {
+  const result = await createUserWithEmailAndPassword(auth, email, password);
+  return { uid: result.user.uid, email: result.user.email, displayName: name };
 }
 
 export async function signOut() {
