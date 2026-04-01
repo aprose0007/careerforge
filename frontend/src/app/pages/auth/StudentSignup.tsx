@@ -17,16 +17,12 @@ export default function StudentSignup() {
     setIsLoading(true);
     setError(null);
     try {
-      const user = await signInWithGoogle();
-      await updateStudent(user.uid, {
-        name: user.displayName || "Anonymous User",
-        email: user.email || "",
-      });
-      navigate("/student");
+      sessionStorage.setItem("authRole", "student");
+      await signInWithGoogle();
+      // Process halts here as redirect happens
     } catch (err: any) {
       console.error("Signup failed:", err);
       setError(err.message || "Failed to sign up with Google.");
-    } finally {
       setIsLoading(false);
     }
   };
@@ -36,18 +32,26 @@ export default function StudentSignup() {
     setIsLoading(true);
     setError(null);
     try {
-      if (password.length < 6) return setError("Password must be at least 6 characters.");
+      if (password.length < 6) {
+        setError("Password must be at least 6 characters.");
+        setIsLoading(false);
+        return;
+      }
       
       const user = await signUpWithEmail(email, password, name);
-      await updateStudent(user.uid, {
-        name: name,
-        email: email,
-      });
+      try {
+        await updateStudent(user.uid, {
+          name: name,
+          email: email,
+        });
+      } catch (e) {
+        console.warn("Firestore profile creation failed or hangs, but user created:", e);
+      }
       navigate("/student");
     } catch (err: any) {
       setError(err.message || "Failed to create account.");
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Only executes if navigate doesn't unmount abruptly
     }
   };
 

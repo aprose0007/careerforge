@@ -2,7 +2,9 @@ import { initializeApp } from "firebase/app";
 import { 
   getAuth, 
   GoogleAuthProvider, 
-  signInWithPopup, 
+  signInWithRedirect, 
+  getRedirectResult,
+  getAdditionalUserInfo,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut 
@@ -100,15 +102,19 @@ export interface Recommendation {
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  // Provide custom parameters to prompt account selection explicitly every time
-  provider.setCustomParameters({
-    prompt: 'select_account'
-  });
-  const result = await signInWithPopup(auth, provider);
+  provider.setCustomParameters({ prompt: 'select_account' });
+  await signInWithRedirect(auth, provider);
+}
+
+export async function checkAuthRedirect() {
+  const result = await getRedirectResult(auth);
+  if (!result) return null;
+  
   return {
     uid: result.user.uid,
     email: result.user.email,
     displayName: result.user.displayName,
+    isNewUser: getAdditionalUserInfo(result)?.isNewUser
   };
 }
 

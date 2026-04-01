@@ -16,16 +16,12 @@ export default function StudentLogin() {
     setIsLoading(true);
     setError(null);
     try {
-      const user = await signInWithGoogle();
-      await updateStudent(user.uid, {
-        name: user.displayName || "Anonymous User",
-        email: user.email || "",
-      });
-      navigate("/student");
+      sessionStorage.setItem("authRole", "student");
+      await signInWithGoogle();
+      // Redirect happens here
     } catch (err: any) {
       console.error("Login failed:", err);
       setError(err.message || "Failed to sign in with Google.");
-    } finally {
       setIsLoading(false);
     }
   };

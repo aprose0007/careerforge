@@ -16,13 +16,12 @@ export default function AdminLogin() {
     setIsLoading(true);
     setError(null);
     try {
+      sessionStorage.setItem("authRole", "admin");
       await signInWithGoogle();
-      // Admins just navigate directly, backend logic can verify their role
-      navigate("/admin");
+      // Admins redirect to google auth url
     } catch (err: any) {
       console.error("Login failed:", err);
       setError(err.message || "Failed to sign in with Google.");
-    } finally {
       setIsLoading(false);
     }
   };

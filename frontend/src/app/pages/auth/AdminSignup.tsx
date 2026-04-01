@@ -17,12 +17,12 @@ export default function AdminSignup() {
     setIsLoading(true);
     setError(null);
     try {
+      sessionStorage.setItem("authRole", "admin");
       await signInWithGoogle();
-      navigate("/admin");
+      // Code halts as redirect processes
     } catch (err: any) {
       console.error("Signup failed:", err);
       setError(err.message || "Failed to sign up with Google.");
-    } finally {
       setIsLoading(false);
     }
   };
@@ -32,7 +32,11 @@ export default function AdminSignup() {
     setIsLoading(true);
     setError(null);
     try {
-      if (password.length < 6) return setError("Password must be at least 6 characters.");
+      if (password.length < 6) {
+        setError("Password must be at least 6 characters.");
+        setIsLoading(false);
+        return;
+      }
       
       await signUpWithEmail(email, password, name);
       navigate("/admin");
