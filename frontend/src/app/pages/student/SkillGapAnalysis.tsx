@@ -72,7 +72,7 @@ export default function SkillGapAnalysis() {
   ];
 
   return (
-    <div className="p-8 space-y-8 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-6xl mx-auto">
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-4xl font-semibold">Skill Gap Analysis</h1>

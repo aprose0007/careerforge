@@ -1,7 +1,7 @@
 // AI API Service Layer
 // Replace BASE_URL with your actual AI backend endpoint
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://api.resumeai.example.com";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL ?? "https://api.resumeai.example.com";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

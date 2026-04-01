@@ -129,7 +129,7 @@ export default function JobRecommendations() {
   });
 
   return (
-    <div className="p-8 space-y-8 max-w-7xl mx-auto pb-20">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-7xl mx-auto pb-20">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-1">

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Outlet } from "react-router";
 import TopNav from "../components/TopNav";
 import Sidebar from "../components/Sidebar";
@@ -16,17 +17,21 @@ const adminNavItems = [
 ];
 
 export default function AdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-background">
-      <TopNav />
-      <div className="flex flex-1 overflow-hidden">
+      <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <div className="flex flex-1 overflow-hidden relative">
         <Sidebar 
           items={adminNavItems}
           userRole="admin" 
           userName="Sarah Mitchell" 
           userEmail="sarah.admin@university.edu"
+          isOpen={sidebarOpen}
+          setIsOpen={setSidebarOpen}
         />
-        <main className="flex-1 overflow-y-auto scroll-smooth">
+        <main className="flex-1 overflow-y-auto scroll-smooth w-full">
           <Outlet />
         </main>
       </div>

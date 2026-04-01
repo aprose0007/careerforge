@@ -1,9 +1,13 @@
 import { useLocation } from "react-router";
-import { Bell, Moon, Sun, Search } from "lucide-react";
+import { Bell, Moon, Sun, Search, Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-export default function TopNav() {
+interface TopNavProps {
+  onMenuClick?: () => void;
+}
+
+export default function TopNav({ onMenuClick }: TopNavProps) {
   const location = useLocation();
   
   // Format pathname into a readable title
@@ -13,8 +17,13 @@ export default function TopNav() {
     : pathParts[0] || "Dashboard";
 
   return (
-    <div className="h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-40 shadow-sm flex items-center justify-between px-8">
-      <div className="flex items-center gap-4 flex-1">
+    <div className="h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-40 shadow-sm flex items-center justify-between px-4 md:px-8">
+      <div className="flex items-center gap-2 md:gap-4 flex-1">
+        {onMenuClick && (
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
+            <Menu className="w-6 h-6" />
+          </Button>
+        )}
         <h1 className="text-xl font-semibold capitalize hidden md:block">
           {title}
         </h1>
@@ -27,7 +36,7 @@ export default function TopNav() {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3">
         {/* Theme Toggle placeholder */}
         <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:text-foreground">
           <Sun className="w-5 h-5 hidden dark:block" />

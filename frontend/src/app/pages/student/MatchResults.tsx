@@ -80,7 +80,7 @@ export default function MatchResults() {
   ];
 
   return (
-    <div className="p-8 space-y-8 max-w-5xl mx-auto pb-20">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-5xl mx-auto pb-20">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">

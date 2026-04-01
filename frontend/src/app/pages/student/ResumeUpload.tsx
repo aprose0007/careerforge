@@ -6,6 +6,7 @@ import { uploadResume, updateStudent, saveResumeData, auth } from "../../service
 import { calculateMatch, extractSkillsFromText } from "../../services/matcher";
 import { KNOWN_SKILLS } from "../../config/skills";
 import * as pdfjsLib from "pdfjs-dist";
+import Tesseract from "tesseract.js";
 
 // Set worker for pdfjs
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -33,6 +34,11 @@ export default function ResumeUpload() {
     return fullText;
   };
 
+  const extractTextFromImage = async (file: File): Promise<string> => {
+    const result = await Tesseract.recognize(file, 'eng');
+    return result.data.text;
+  };
+
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -48,10 +54,10 @@ export default function ResumeUpload() {
     setIsDragging(false);
     setError(null);
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && droppedFile.type === "application/pdf") {
+    if (droppedFile && (droppedFile.type === "application/pdf" || droppedFile.type.startsWith("image/"))) {
       setFile(droppedFile);
     } else {
-      setError("Please upload a PDF file.");
+      setError("Please upload a PDF or Image file.");
     }
   }, []);
 
@@ -59,10 +65,10 @@ export default function ResumeUpload() {
     const selectedFile = e.target.files?.[0];
     setError(null);
     if (selectedFile) {
-      if (selectedFile.type === "application/pdf") {
+      if (selectedFile.type === "application/pdf" || selectedFile.type.startsWith("image/")) {
         setFile(selectedFile);
       } else {
-        setError("Please upload a PDF file.");
+        setError("Please upload a PDF or Image file.");
       }
     }
   };
@@ -95,7 +101,12 @@ export default function ResumeUpload() {
     setError(null);
     try {
       // 1. Extract Text
-      const text = await extractTextFromPDF(file);
+      let text = "";
+      if (file.type === "application/pdf") {
+        text = await extractTextFromPDF(file);
+      } else if (file.type.startsWith("image/")) {
+        text = await extractTextFromImage(file);
+      }
 
       // 2. Perform AI Analysis (Prioritize Remote AI Engine if available, else use Local)
       const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -147,7 +158,7 @@ export default function ResumeUpload() {
   };
 
   return (
-    <div className="p-8 space-y-8 max-w-4xl mx-auto">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-4xl mx-auto">
       <div className="space-y-2">
         <h1 className="text-4xl font-semibold">Resume Upload</h1>
         <p className="text-muted-foreground text-lg">
@@ -179,9 +190,9 @@ export default function ResumeUpload() {
           <div className="space-y-2">
             <h3 className="text-xl font-semibold">{isDragging ? "Drop your resume here" : "Drag and drop your resume"}</h3>
             <p className="text-muted-foreground">or click to browse files</p>
-            <p className="text-sm text-muted-foreground">PDF format recommended (Max 10MB)</p>
+            <p className="text-sm text-muted-foreground">PDF or Image format recommended (Max 10MB)</p>
           </div>
-          <input type="file" id="fileInput" accept=".pdf" onChange={handleFileInput} className="hidden" />
+          <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg" onChange={handleFileInput} className="hidden" />
           <Button variant="outline" className="h-12 rounded-xl px-8 border-2" onClick={() => document.getElementById("fileInput")?.click()}>
             Browse Files
           </Button>
