@@ -35,7 +35,12 @@ export default function StudentLogin() {
     setIsLoading(true);
     setError(null);
     try {
-      await signInWithEmail(email, password);
+      const authPromise = signInWithEmail(email, password);
+      const timeoutPromise = new Promise<any>((_, reject) => 
+        setTimeout(() => reject(new Error("Network timeout: Firebase is taking too long to respond. Please disable any adblockers and refresh.")), 10000)
+      );
+      
+      await Promise.race([authPromise, timeoutPromise]);
       navigate("/student");
     } catch (err: any) {
       setError(err.message || "Invalid email or password.");
