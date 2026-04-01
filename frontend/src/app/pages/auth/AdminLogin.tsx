@@ -65,7 +65,7 @@ export default function AdminLogin() {
           </div>
           <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className="h-12 rounded-xl" />
         </div>
-        <Button disabled={isLoading} type="submit" className="w-full h-12 rounded-xl shadow-md text-base font-semibold bg-primary">
+        <Button disabled={isLoading} type="submit" className="w-full h-12 rounded-xl shadow-md text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white border-0">
           {isLoading ? "Signing In..." : "Sign in as Admin"}
         </Button>
 
