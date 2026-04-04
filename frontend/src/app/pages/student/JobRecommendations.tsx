@@ -170,6 +170,8 @@ export default function JobRecommendations() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Regions</SelectItem>
+                <SelectItem value="chennai">Chennai</SelectItem>
+                <SelectItem value="tamil nadu">Tamil Nadu</SelectItem>
                 <SelectItem value="ca">California</SelectItem>
                 <SelectItem value="wa">Washington</SelectItem>
                 <SelectItem value="ny">New York</SelectItem>
@@ -281,13 +283,13 @@ export default function JobRecommendations() {
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Required Skills Match</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {job.skills.slice(0, 4).map((skill: string) => (
+                  {(job.skills ?? []).slice(0, 4).map((skill: string) => (
                     <Badge key={skill} variant="secondary" className="rounded-md px-2 py-0.5 font-bold text-[11px] uppercase tracking-wider bg-primary/10 text-primary">
                       {skill}
                     </Badge>
                   ))}
-                  {job.skills.length > 4 && (
-                    <Badge variant="outline" className="rounded-md border-dashed px-2 py-0.5 text-muted-foreground/50 text-[11px] font-bold">+{job.skills.length - 4}</Badge>
+                  {(job.skills ?? []).length > 4 && (
+                    <Badge variant="outline" className="rounded-md border-dashed px-2 py-0.5 text-muted-foreground/50 text-[11px] font-bold">+{(job.skills ?? []).length - 4}</Badge>
                   )}
                 </div>
               </div>

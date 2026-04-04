@@ -1,3 +1,4 @@
+# Render Blueprint — set ALLOWED_ORIGINS in the dashboard for the API service if you want explicit CORS (Vercel URL + http://localhost:5173).
 services:
   # Python Backend (FastAPI)
   - type: web
@@ -9,9 +10,6 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
-      # Set to your static site URL(s), comma-separated (see backend/.env.example)
-      - key: ALLOWED_ORIGINS
-        sync: false
 
   # React Frontend (Static Site)
   - type: web

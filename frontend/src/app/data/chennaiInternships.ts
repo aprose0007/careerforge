@@ -1,0 +1,148 @@
+import type { Job } from "../services/firebase";
+
+/**
+ * Chennai-area internship postings for admin “Import Chennai internships” (Firestore `jobs` shape).
+ * Sourced from local campus/placement style listings — stipends indicative.
+ */
+export const CHENNAI_INTERNSHIP_SEED: Omit<Job, "id">[] = [
+  {
+    title: "Software Intern",
+    company: "Zoho Corporation",
+    location: "Tenkasi/Chennai",
+    type: "Internship",
+    skills: ["Python", "Java", "SQL"],
+    description:
+      "Internship with product/platform teams using Python, Java, and SQL. Work location may be Tenkasi or Chennai depending on team.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/zoho.com",
+    compensation: "₹8,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "Frontend Intern",
+    company: "Freshworks",
+    location: "Chennai",
+    type: "Internship",
+    skills: ["React", "JS", "CSS"],
+    description:
+      "Chennai internship building customer-facing SaaS UI with React, JavaScript, and CSS alongside design and engineering mentors.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/freshworks.com",
+    compensation: "₹10,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "ERP Dev Intern",
+    company: "Ramco Systems",
+    location: "Guindy, Chennai",
+    type: "Internship",
+    skills: ["Java", "MySQL"],
+    description:
+      "Guindy office: ERP development exposure—Java, MySQL, and enterprise delivery on aviation, HR, or logistics modules.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/ramco.com",
+    compensation: "₹6,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "Data Intern",
+    company: "Verizon Data Services",
+    location: "Chennai",
+    type: "Internship",
+    skills: ["Python", "SQL"],
+    description:
+      "Chennai data internship: analysis and reporting with Python and SQL; emphasis on data quality and business-ready outputs.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/verizon.com",
+    compensation: "₹7,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "QA Intern",
+    company: "PayPal India",
+    location: "Chennai",
+    type: "Internship",
+    skills: ["Manual Testing", "JIRA"],
+    description:
+      "Chennai QA track: manual testing, test cases, and defect tracking in JIRA with engineering teams on payments quality.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/paypal.com",
+    compensation: "₹8,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "Web Dev Intern",
+    company: "NTT Data",
+    location: "Sholinganallur, Chennai",
+    type: "Internship",
+    skills: ["HTML/CSS", "JS"],
+    description:
+      "Web development internship at Sholinganallur, Chennai—HTML/CSS layouts and JavaScript; integrate with team standards and code review.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/nttdata.com",
+    compensation: "₹5,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "Systems Intern",
+    company: "Infosys (Mahindra City)",
+    location: "Chengalpattu",
+    type: "Internship",
+    skills: ["Java", "SQL"],
+    description:
+      "Systems internship at Mahindra City, Chengalpattu—Java and SQL in enterprise application and support contexts.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/infosys.com",
+    compensation: "₹5,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "AI/ML Intern",
+    company: "Hexaware Technologies",
+    location: "Chennai",
+    type: "Internship",
+    skills: ["Python", "ML basics"],
+    description:
+      "Chennai AI/ML internship: Python for experiments and ML fundamentals with guidance on data prep and model evaluation.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/hexaware.com",
+    compensation: "₹6,000/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "Cloud Intern",
+    company: "Sify Technologies",
+    location: "Tidel Park, Chennai",
+    type: "Internship",
+    skills: ["Linux", "Networking"],
+    description:
+      "Cloud and infrastructure internship at Tidel Park, Chennai—Linux basics, networking, and exposure to managed services operations.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/sify.com",
+    compensation: "₹5,500/mo",
+    applicationsCount: 0,
+  },
+  {
+    title: "Python Intern",
+    company: "Sutherland Global",
+    location: "Perungudi, Chennai",
+    type: "Internship",
+    skills: ["Python", "Automation"],
+    description:
+      "Perungudi, Chennai internship focused on Python scripting and automation for internal tools and repeatable operational tasks.",
+    status: "active",
+    postedAt: "2026-04-04",
+    logoUrl: "https://logo.clearbit.com/sutherlandglobal.com",
+    compensation: "₹4,500/mo",
+    applicationsCount: 0,
+  },
+];

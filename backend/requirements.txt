@@ -1,5 +1,6 @@
-fastapi
-uvicorn
-scikit-learn
-pydantic
-python-multipart
+# Pinned for reproducible deploys (Render / Railway / CI). Python 3.11+ recommended.
+fastapi>=0.115.0,<0.130.0
+uvicorn[standard]>=0.32.0,<0.41.0
+scikit-learn>=1.5.0,<1.9.0
+pydantic>=2.10.0,<3.0.0
+python-multipart>=0.0.9,<0.1.0
