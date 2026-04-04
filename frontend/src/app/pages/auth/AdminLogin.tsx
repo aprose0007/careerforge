@@ -17,8 +17,8 @@ export default function AdminLogin() {
     setIsLoading(true);
     setError(null);
 
-    // Hardcoded restriction as requested
-    if (email.trim() !== "testing123@gmail.com") {
+    // Hardcoded restriction as requested: ONLY one admin allowed
+    if (email.trim().toLowerCase() !== "testing123@gmail.com") {
       setIsLoading(false);
       return setError("Unauthorized: Only verified administrators can access this portal.");
     }
@@ -27,7 +27,7 @@ export default function AdminLogin() {
       await signInWithEmail(email, password);
       navigate("/admin");
     } catch (err: any) {
-      setError(err.message || "Invalid email or password.");
+      setError("Invalid administrator credentials. Please check your password.");
     } finally {
       setIsLoading(false);
     }
