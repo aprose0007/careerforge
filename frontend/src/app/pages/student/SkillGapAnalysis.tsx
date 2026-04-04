@@ -1,11 +1,19 @@
-import { Link } from "react-router";
+import { Link, useOutletContext } from "react-router";
 import { Card } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Progress } from "../../components/ui/progress";
 import { CheckCircle, ArrowRight, BookOpen, Video, FileText, Award } from "lucide-react";
+import { type StudentProfile } from "../../services/firebase";
 
 export default function SkillGapAnalysis() {
-  const currentSkills = [
+  const { student } = useOutletContext<{ student: StudentProfile | null }>();
+
+  // Use real data from student profile, or fallback to defaults for demo
+  const currentSkills = student?.skills?.map(skill => ({
+    name: skill,
+    level: Math.floor(Math.random() * (95 - 70 + 1)) + 70, // Randomized level for mockup
+    category: "Professional"
+  })) || [
     { name: "React", level: 90, category: "Frontend" },
     { name: "TypeScript", level: 85, category: "Language" },
     { name: "Node.js", level: 80, category: "Backend" },
