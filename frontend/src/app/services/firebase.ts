@@ -19,7 +19,8 @@ import {
   query, 
   where,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  deleteDoc,
 } from "firebase/firestore";
 import { 
   getStorage, 
@@ -81,6 +82,9 @@ export interface Job {
   postedAt: string;
   logoUrl?: string;
   minCgpa?: number;
+  /** Stipend or salary range for listings */
+  compensation?: string;
+  applicationsCount?: number;
 }
 
 export interface Application {
@@ -151,7 +155,47 @@ export async function updateStudent(studentId: string, data: Partial<StudentProf
 
 export async function getJobs(): Promise<Job[]> {
   const querySnapshot = await getDocs(collection(db, "jobs"));
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Job));
+  return querySnapshot.docs.map((d) => {
+    const data = d.data();
+    return {
+      id: d.id,
+      ...data,
+      skills: Array.isArray(data.skills) ? data.skills : [],
+      description: typeof data.description === "string" ? data.description : "",
+    } as Job;
+  });
+}
+
+export async function createJob(job: Omit<Job, "id">): Promise<string> {
+  const docRef = await addDoc(collection(db, "jobs"), {
+    ...job,
+    skills: job.skills ?? [],
+    status: job.status ?? "active",
+    applicationsCount: job.applicationsCount ?? 0,
+  });
+  return docRef.id;
+}
+
+export async function deleteJob(jobId: string): Promise<void> {
+  await deleteDoc(doc(db, "jobs", jobId));
+}
+
+/** Add multiple jobs (e.g. Chennai sample pack). Skips a row if same title+company+location already exists. */
+export async function createJobsIfNew(
+  jobs: Omit<Job, "id">[],
+  existing: Pick<Job, "title" | "company" | "location">[]
+): Promise<number> {
+  const key = (j: Pick<Job, "title" | "company" | "location">) =>
+    `${j.title}|${j.company}|${j.location}`.toLowerCase();
+  const existingKeys = new Set(existing.map(key));
+  let added = 0;
+  for (const job of jobs) {
+    if (existingKeys.has(key(job))) continue;
+    await createJob(job);
+    existingKeys.add(key(job));
+    added += 1;
+  }
+  return added;
 }
 
 export async function createApplication(application: Omit<Application, "id" | "appliedAt">) {
@@ -163,10 +207,11 @@ export async function createApplication(application: Omit<Application, "id" | "a
 }
 
 export async function saveRecommendations(recommendations: Omit<Recommendation, "id">[]) {
-  const batch = recommendations.map(rec => 
-    setDoc(doc(collection(db, "recommendations")), rec)
+  await Promise.all(
+    recommendations.map((rec) =>
+      setDoc(doc(db, "recommendations", `${rec.userId}_${rec.jobId}`), rec, { merge: true })
+    )
   );
-  await Promise.all(batch);
 }
 
 export async function getRecommendations(userId: string): Promise<Recommendation[]> {

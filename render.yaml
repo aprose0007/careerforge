@@ -9,6 +9,9 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      # Set to your static site URL(s), comma-separated (see backend/.env.example)
+      - key: ALLOWED_ORIGINS
+        sync: false
 
   # React Frontend (Static Site)
   - type: web
