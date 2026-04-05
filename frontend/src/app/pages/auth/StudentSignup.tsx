@@ -4,6 +4,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { signInWithGoogle, signUpWithEmail, updateStudent } from "../../services/firebase";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function StudentSignup() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function StudentSignup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleGoogleSignup = async () => {
@@ -93,7 +95,24 @@ export default function StudentSignup() {
         </div>
         <div className="space-y-2.5">
           <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
-          <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className="h-12 rounded-xl" />
+          <div className="relative">
+            <Input 
+              id="password" 
+              type={showPassword ? "text" : "password"} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+              placeholder="••••••••" 
+              className="h-12 rounded-xl pr-10" 
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
         <Button disabled={isLoading} type="submit" className="w-full h-12 rounded-xl shadow-md text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white border-0">
           {isLoading ? "Creating..." : "Sign up"}

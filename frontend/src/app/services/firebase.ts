@@ -111,7 +111,8 @@ export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
   try {
-    const result = await signInWithPopup(auth, provider);
+    // Adding browserPopupRedirectResolver helps resolve 'missing initial state' errors on some mobile browsers
+    const result = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
     return {
       uid: result.user.uid,
       email: result.user.email,
@@ -119,7 +120,11 @@ export async function signInWithGoogle() {
     };
   } catch (err: any) {
     if (err.code === 'auth/cancelled-popup-request' || err.code === 'auth/popup-blocked') {
-      throw new Error("Google login blocked by your browser's strict Cross-Origin security. Please use Email Sign Up.");
+      throw new Error("Google login blocked by your browser's strict Cross-Origin security. Please allow popups or use Email Sign Up.");
+    }
+    // Specific check for the 'missing initial state' error common on mobile
+    if (err.code === 'auth/internal-error' && err.message?.includes('missing initial state')) {
+      throw new Error("Login failed due to restrictive browser settings. Please try in a standard browser or use Email Sign Up.");
     }
     throw err;
   }
