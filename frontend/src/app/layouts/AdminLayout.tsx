@@ -26,8 +26,8 @@ export default function AdminLayout() {
         <Sidebar 
           items={adminNavItems}
           userRole="admin" 
-          userName="Sarah Mitchell" 
-          userEmail="sarah.admin@university.edu"
+          userName="Admin" 
+          userEmail="testing123@gmail.com"
           isOpen={sidebarOpen}
           setIsOpen={setSidebarOpen}
         />

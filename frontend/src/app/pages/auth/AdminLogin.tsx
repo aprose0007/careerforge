@@ -18,9 +18,9 @@ export default function AdminLogin() {
     setError(null);
 
     // Hardcoded restriction as requested: ONLY one admin allowed
-    if (email.trim().toLowerCase() !== "testing123@gmail.com") {
+    if (email.trim().toLowerCase() !== "testing123@gmail.com" || password !== "testercanwork@123") {
       setIsLoading(false);
-      return setError("Unauthorized: Only verified administrators can access this portal.");
+      return setError("Unauthorized: Only verified administrators can access this portal with the correct credentials.");
     }
 
     try {
